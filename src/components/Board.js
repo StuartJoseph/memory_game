@@ -4,30 +4,30 @@ import Score from "./Score";
 import Title from "./Title";
 import Options from "./Options";
 import Rules from "./Rules";
-
+// this is the parent component that holds all of the other components
 class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      myScore: 0,
-      modalShow: false,
+      myScore: 0, // this state property is linked to it's child's state "<Tile/>" property "points" to keep track of the points
+      modalShow: false, // this state property is linked to its child's component "<Rules/>" attribute "show" that displays the modal if the state's property is value is true
     };
   }
 
   showModal = () => {
-    this.setState({ modalShow: true });
+    this.setState({ modalShow: true }); // function that shows the modal
   };
 
   hideModal = () => {
-    this.setState({ modalShow: false });
+    this.setState({ modalShow: false }); // function that hides the modal
   };
 
   getScore = (score) => {
-    this.setState({ myScore: score });
+    this.setState({ myScore: score }); // update the state with the value recieved from it child
   };
 
   playAgain = () => {
-    window.location.reload();
+    window.location.reload(); // this function just refeshes/reloads the page
   };
 
   //click event attached to each tile
