@@ -11,7 +11,7 @@ import Blank from "./img/blank.png";
 class Tile extends Component {
   constructor(props) {
     super(props);
-    this.state = { points: 0 }; // your score is 0 when you begin game
+    this.state = { points: 0, clicks: 0 }; // your score is 0 when you begin game and clicks begins at 1
     this.prevTile = []; // your first choice or tile is stored here
     this.matches = []; // all tiles that were a match are stored here
     // array of objects that has all the tile information
@@ -72,32 +72,43 @@ a tile before and if the tile is not the same as your first choice */
       // checks if this is your first choice
       this.prevTile.push(event.target); // store first choice into array
       event.target.src = this.tileArray[event.target.id].img; // shows the image liked to tile
+      this.setState({ clicks: this.state.clicks + 1 }); // every time a tile is turn, it adds to click count
+      this.props.myClicks(this.state.clicks); // pass the value to parent via props
+      this.props.updateMyMoves(1); // // pass the value to parent via props
     } else {
       if (this.prevTile[0].id === event.target.id) {
         // checks if your second choice is the same tile
         event.target.src = Background; // change tile image to background
+        this.setState({ clicks: this.state.clicks + 1 }); // every time a tile is turn, it adds to click count
         this.prevTile = []; // empty array
+        this.props.myClicks(this.state.clicks); // pass the value to parent via props
+        this.props.updateMyMoves(1); // // pass the value to parent via props
       } else {
         event.target.src = this.tileArray[event.target.id].img; // show image of second choice
+        this.setState({ clicks: this.state.clicks + 1 }); // every time a tile is turn, it adds to click count
+        this.props.myClicks(this.state.clicks); // pass the value to parent via props
+        this.props.updateMyMoves(1); // // pass the value to parent via props
         setTimeout(() => this.checkForMatch(event), 400); // then run this function after 400ms so user can see image before it checks for match
       }
     }
   };
 
   render() {
-    // map through array to produce a tile for each object in the array
-    return this.tileArray.map((tile) => {
-      return (
-        <div key={tile.id}>
-          <img
-            onClick={this.handleClick}
-            id={tile.id}
-            src={Background}
-            alt=""
-          />
-        </div>
-      );
-    });
+    return this.props.myMoves <= 0
+      ? null
+      : // map through array to produce a tile for each object in the array
+        this.tileArray.map((tile) => {
+          return (
+            <div key={tile.id}>
+              <img
+                onClick={this.handleClick}
+                id={tile.id}
+                src={Background}
+                alt=""
+              />
+            </div>
+          );
+        });
   }
 }
 export default Tile;
